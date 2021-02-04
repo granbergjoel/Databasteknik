@@ -83,9 +83,6 @@ $stmt->execute();
 $last_id=$conn->lastInsertId();
 echo "<p>$name har sparats i databasen med id=$last_id</p>";
 
-
-
-
 }
 ?>
 
