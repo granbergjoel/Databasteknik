@@ -16,7 +16,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
     $name = $_POST['name'];
     $tel = $_POST['tel'];
 
-
     $sql = "UPDATE contacts SET name = :name, tel = :tel WHERE id = :id"; 
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':id', $id);
