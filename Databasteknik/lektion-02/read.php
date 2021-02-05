@@ -23,7 +23,7 @@ $stmt->execute();
 $result = $stmt->fetchAll();
 
 $table= "<table class='table table-hover'>
-        <tr><th>Namn</th><th>Telefon</th><th>Admin</th></tr>";
+        <tr><th>Namn</th><th>Telefon</th><th>Email</th><th>Address</th><th>Admin</th></tr>";
 
 
 
@@ -32,6 +32,8 @@ $table.="
     <tr>
         <td>$value[name]</td>
         <td>$value[tel]</td>
+        <td>$value[email]</td>
+        <td>$value[address]</td>
         <td>
             <a href='update.php?id=$value[id]'>Uppdatera</a> |
             <a href='delete.php?id=$value[id]'>Ta bort</a>

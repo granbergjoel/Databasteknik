@@ -42,15 +42,23 @@ $message= "<div class='alert alert-success' role='alert'>
 
 <form action="#" class="row" method="post">
 
-<div class="col-md-4 my-2">
+<div class="col-md-3 my-2">
     <input type="text" class="form-control" name="name">
 </div>
 
-<div class="col-md-4 my-2">
+<div class="col-md-3 my-2">
     <input type="text" class="form-control" name="tel">
 </div>
 
-<div class="col-md-4 my-2">
+<div class="col-md-3 my-2">
+    <input type="text" class="form-control" name="email">
+</div>
+
+<div class="col-md-3 my-2">
+    <input type="text" class="form-control" name="address">
+</div>
+
+<div class="col-md-3 my-2">
     <input type="submit" value="Lägg till" class="form-control btn btn-outline-info">
 </div>
 
