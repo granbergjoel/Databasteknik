@@ -54,6 +54,8 @@ $message= "<div class='alert alert-success' role='alert'>
     <input type="submit" value="Lägg till" class="form-control btn btn-outline-info">
 </div>
 
+
+
 </form>
 
 <?php  if (isset($message)) echo $message; ?>
