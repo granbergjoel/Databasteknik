@@ -8,21 +8,21 @@ $conn->exec("USE $dbName");
 $id=$_GET['id'];
 
 //FETCH ALL med kundinfo
-$stmt = $conn->prepare("SELECT * FROM orders WHERE order_id=$id");
-
+$stmt = $conn->prepare("SELECT * FROM orders WHERE order_id=$id;");
 $stmt->execute();
-
 $result = $stmt->fetchAll();
 
-echo "<pre>";
-print_r($result);
-echo "</pre>";
+$customer_id = $result[0]['customer_id'];
+
+$stmt = $conn->prepare("SELECT * FROM customers WHERE customer_id=$customer_id;");
+$stmt->execute();
+$result = $stmt->fetchAll();
 
 //Skriv ut kundinfo till ett meddelande
 foreach($result as $key =>$value){
 $message = "<div class='alert alert-success' role='success'>
             <p>Hej $value[customer]!</p>
-            <p>En order har skapats med Order-id:$value[order_id]!</p>
+            <p>En order har skapats med Order-id:$id!</p>
             </div>";
         }
  echo $message;

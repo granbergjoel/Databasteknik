@@ -98,79 +98,65 @@ echo $order;
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
   $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
-  //echo $email;
-  
-  try {
+  echo $email;
+  $stmt = $conn->prepare("SELECT * FROM customers
+  WHERE customers.email='$email'");
+  $stmt->execute();
+  $result = $stmt->fetchAll();
+
+  if ($result == null){
+    echo "kund saknas";
+
+    $customer = filter_var($_POST['customer'], FILTER_SANITIZE_STRING);
+    $phone = filter_var($_POST['phone'], FILTER_SANITIZE_STRING);
+    $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
+    $custom_add = filter_var($_POST['custom_add'], FILTER_SANITIZE_STRING);
+    
+    $stmt = $conn->prepare("INSERT INTO customers (customer , phone, email, custom_add)
+    VALUES (:customer , :phone , :email, :custom_add)");
+    
+    $stmt->bindParam(':customer', $customer);
+    $stmt->bindParam(':phone', $phone);
+    $stmt->bindParam(':email', $email);
+    $stmt->bindParam(':custom_add', $custom_add);
+    
+    $stmt->execute();
+    
+    $customer_id=$conn->lastInsertId();
+    echo "Kund ID: ". $customer_id; 
+
+   
+
+  } else {
+
     $stmt = $conn->prepare("SELECT * FROM customers
     WHERE customers.email='$email'");
     $stmt->execute();
     $result = $stmt->fetchAll();
 
     $customer_id = $result[0]['customer_id'];
-    echo "Kund ID: ". $customer_id;
-      //HÄMTA KUND ID
-  // OM DETTA FUNKAR FINNS EN KUND, DÅ TAR VI MED KUND_ID TILL NÄSTA SIDA
-  } catch(Exception $e){
-$customer = filter_var($_POST['customer'], FILTER_SANITIZE_STRING);
-$phone = filter_var($_POST['phone'], FILTER_SANITIZE_STRING);
-$email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
-$custom_add = filter_var($_POST['custom_add'], FILTER_SANITIZE_STRING);
+    echo "Den gamla kunden har ID: ". $customer_id;
 
-$stmt = $conn->prepare("INSERT INTO customer (customer , phone, email, custom_add)
-VALUES (:customer , :phone , :email, :custom_add)");
+  }
 
-$stmt->bindParam(':customer', $customer);
-$stmt->bindParam(':phone', $phone);
-$stmt->bindParam(':email', $email);
-$stmt->bindParam(':custom_add', $custom_add);
+
+// CREATE ORDER
+$product_id = $_GET['id'];
+echo "Produkt-ID: ". $product_id;
+
+
+$stmt = $conn->prepare("INSERT INTO orders (product_id, customer_id)
+VALUES (:product_id ,:customer_id)");
+$stmt->bindParam(':customer_id', $customer_id);
+$stmt->bindParam(':product_id', $product_id);
 
 $stmt->execute();
 
-$id=$conn->lastInsertId();
-  // Fixa parametrar här!!
-header("Location: confirmation.php?customer_id=$id&product_id=product_id");
-}
+$last_order_id=$conn->lastInsertId();
 
-
-  
- /*
-  echo "<br>";
-  echo "<pre>";
-  print_r($result) ;
-  echo "</pre>";
-  */
- 
-  // CREATE ORDER
-  $customer_id = filter_var($_POST['customer'], FILTER_SANITIZE_STRING);
-  $product_id = $_GET['id'];
-  
-
-  $stmt = $conn->prepare("INSERT INTO orders (product_id, customer_id)
-  VALUES (:product_id ,:customer_id)");
-  $stmt->bindParam(':customer_id', $customer_id);
-  $stmt->bindParam(':product_id', $product_id);
-
-  $stmt->execute();
-
-/*
-  $stmt->bindParam(':phone', $phone);
-  $stmt->bindParam(':email', $email);
-  $stmt->bindParam(':custom_add', $custom_add);
-
-  
-  $phone = filter_var($_POST['phone'], FILTER_SANITIZE_STRING);
-  $custom_add = filter_var($_POST['custom_add'], FILTER_SANITIZE_STRING);
-*/
-
-  // OM KUNDEN INTE FINNS GÖR DETTA
-
-
- 
-$id=$conn->lastInsertId();
-
-header("Location: confirmation.php?id=$id");
-
-//ANNARS TA DATA FRÅN EXISTERANDE KUND
+header("Location: confirmation.php?id=$last_order_id");
 
 }
+
+
 ?>
